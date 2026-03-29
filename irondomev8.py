@@ -363,7 +363,7 @@ class PriceFeed:
                     }
                 ]
             }, separators=(',', ':')) # <--- ADD THIS HERE
-            self.ws.send(sub_msg)
+            await self.ws.send(sub_msg)
             while True:
                 try:
                     async with websockets.connect(C["rtds_url"], ping_interval=5) as ws:
