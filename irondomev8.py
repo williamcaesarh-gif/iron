@@ -92,7 +92,7 @@ C = {
     "funder":     os.getenv("POLYMARKET_FUNDER", ""),
     "gamma":      "https://gamma-api.polymarket.com",
     "clob_host":  "https://clob.polymarket.com",
-    "rtds_url":   "wss://ws-live-data.polymarket.com",
+    "rtds_url":   "wss://rtds.polymarket.com/v2",
     "chain_id":   137,
 }
 
@@ -357,12 +357,13 @@ class PriceFeed:
                 "action": "subscribe",
                 "subscriptions": [
                     {
-                        "topic": "crypto_prices",
+                        "topic": "prices",
                         "type": "update",
-                        "filters": "btcusdt,ethusdt,solusdt"
+                        "filters": "BTCUSDT,ETHUSDT,SOLUSDT"
                     }
                 ]
             }, separators=(',', ':')) # <--- ADD THIS HERE
+            self.ws.send(sub_msg)
             while True:
                 try:
                     async with websockets.connect(C["rtds_url"], ping_interval=5) as ws:
