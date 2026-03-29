@@ -1,0 +1,5 @@
+requests
+websockets
+python-dotenv
+flask
+py-clob-client
