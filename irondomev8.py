@@ -85,6 +85,7 @@ C = {
     "scan_sec":   4,              # faster scan cycle
     "max_kelly":  0.10,           # cap Kelly at 10% of bankroll
     "min_kelly":  0.05,           # floor Kelly at 5%
+    "max_bet":    100.0,
     "pk":         os.getenv("POLYMARKET_PK", ""),
     "funder":     os.getenv("POLYMARKET_FUNDER", ""),
     "gamma":      "https://gamma-api.polymarket.com",
