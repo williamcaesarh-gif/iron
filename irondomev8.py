@@ -688,13 +688,19 @@ def kelly_size(ed, balance):
     """
     p = ed["our_prob"]
     q = 1 - p
-    # Net payout odds after fees
     b = (1 / ed["mkt_prob"] - 1) * (1 - C["fee"])
+
     if b <= 0:
-        return balance * C["min_kelly"]
-    f_star = (b * p - q) / b
-    f_star = max(C["min_kelly"], min(C["max_kelly"], f_star))
-    return balance * f_star
+        f_star = C["min_kelly"]
+    else:
+        f_star = (b * p - q) / b
+        f_star = max(C["min_kelly"], min(C["max_kelly"], f_star))
+
+    # CALCULATE RAW SIZE
+    size = balance * f_star
+
+    # APPLY THE $100 HARD CAP
+    return min(size, C["max_bet"])
 
 # ──────────────────────────────────────────────────────────────
 # ORDER EXECUTOR
