@@ -363,7 +363,7 @@ class PriceFeed:
                     }
                 ]
             }, separators=(',', ':')) # <--- ADD THIS HERE
-            await self.ws.send(sub_msg)
+          
             while True:
                 try:
                     async with websockets.connect(C["rtds_url"], ping_interval=5) as ws:
@@ -385,7 +385,11 @@ class PriceFeed:
         def _thread():
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            loop.run_until_complete(_run())
+            try:
+                # This ensures _run() finishes its setup (like connecting)
+                loop.run_until_complete(_run())
+            finally:
+                loop.close()
 
         threading.Thread(target=_thread, daemon=True).start()
 
