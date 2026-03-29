@@ -1,5 +1,5 @@
 requests
-websockets
+colorama
 python-dotenv
-flask
+websockets
 py-clob-client
