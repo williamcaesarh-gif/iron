@@ -78,7 +78,9 @@ C = {
     "dry_run":    os.getenv("DRY_RUN", "true").lower() == "true",
     "balance":    float(os.getenv("STARTING_BALANCE", "10.0")),
     "fee":        0.0156,         # Polymarket crypto taker fee
-    "min_edge":   0.025,          # 2.5% minimum net edge (was 3%, tuned down with better model)
+    "taker_fee":  0.018,          # Peak fee for Crypto contracts (1.80%)
+    "slippage":   0.010,          # Estimate 1.0% impact on $100 orders
+    "min_edge":   0.035,          # 2.5% minimum net edge (was 3%, tuned down with better model)
     "streak_inc": 0.004,          # +0.4% threshold per loss streak
     "min_bal":    1.50,
     "cooldown":   10,             # base cooldown (adaptive: * streak)
