@@ -346,13 +346,18 @@ class PriceFeed:
             log("websockets not installed — Chainlink stream disabled", "warn")
             return
 
-        sym_map = {"btc/usd": "BTCUSDT", "eth/usd": "ETHUSDT", "sol/usd": "SOLUSDT"}
+        sym_map = {"btcusdt": "BTCUSDT", "ethusdt": "ETHUSDT", "solusdt": "SOLUSDT"}
 
         async def _run():
+          
             sub_msg = json.dumps({
                 "action": "subscribe",
                 "subscriptions": [
-                    {"topic": "crypto_prices_chainlink", "type": "*", "filters": ""}
+                    {
+                        "topic": "crypto_prices", 
+                        "type": "update", 
+                        "filters": "btcusdt,ethusdt,solusdt"
+                    }
                 ]
             })
             while True:
