@@ -41,15 +41,19 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import deque
 from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    load_dotenv()
+except Exception:
+    pass
 
 try:
     import requests
     from colorama import Fore, Style, init as ci
     ci(autoreset=True)
 except ImportError:
-    print("Run: pip install requests colorama python-dotenv websockets py-clob-client")
-    exit()
+    import traceback
+    print("Error during import:")
+    print(traceback.format_exc())
 
 CLOB_OK = False
 try:
