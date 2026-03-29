@@ -77,6 +77,7 @@ except ImportError:
 C = {
     "dry_run":    os.getenv("DRY_RUN", "true").lower() == "true",
     "balance":    float(os.getenv("STARTING_BALANCE", "10.0")),
+    "fee":  0.018,          # Peak fee for Crypto contracts (1.80%)
     "taker_fee":  0.018,          # Peak fee for Crypto contracts (1.80%)
     "slippage":   0.010,          # Estimate 1.0% impact on $100 orders
     "min_edge":   0.035,          # 2.5% minimum net edge (was 3%, tuned down with better model)
