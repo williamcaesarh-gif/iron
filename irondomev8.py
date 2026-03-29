@@ -77,7 +77,6 @@ except ImportError:
 C = {
     "dry_run":    os.getenv("DRY_RUN", "true").lower() == "true",
     "balance":    float(os.getenv("STARTING_BALANCE", "10.0")),
-    "fee":        0.0156,         # Polymarket crypto taker fee
     "taker_fee":  0.018,          # Peak fee for Crypto contracts (1.80%)
     "slippage":   0.010,          # Estimate 1.0% impact on $100 orders
     "min_edge":   0.035,          # 2.5% minimum net edge (was 3%, tuned down with better model)
@@ -737,16 +736,17 @@ class Executor:
 
         if C["dry_run"] or not self._live_client:
             # Dry run with realistic outcome model
-            win = random.random() < ed["our_prob"]
+            win = random.random() < ed["mkt_prob"]
+            shares = size / ed["mkt_prob"]
             slip = (avg_lat / 60000) * 0.05 * size
             fee_c = size * C["fee"]
             spread_c = ed["spread"] / 2 * size
 
             if win:
-                payout = size / ed["mkt_prob"]  # binary payout
-                pnl = payout - size - fee_c - slip - spread_c
+              
+                pnl = (shares * 1.0) - size - fee_c - slip - spread_c
             else:
-                pnl = -size - fee_c * 0.1  # lose stake, small fee on loss
+                pnl = -size - fee_c - slip - spread_c
 
             src_str = "CLOB" if mkt.get("up_price_live") else "Gamma"
             log(f"  [DRY] {mkt['asset']} {mkt['timeframe']} {ed['side']}  "
