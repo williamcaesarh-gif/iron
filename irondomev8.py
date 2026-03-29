@@ -357,12 +357,12 @@ class PriceFeed:
                 "action": "subscribe",
                 "subscriptions": [
                     {
-                        "topic": "crypto_prices", 
-                        "type": "update", 
+                        "topic": "crypto_prices",
+                        "type": "update",
                         "filters": "btcusdt,ethusdt,solusdt"
                     }
                 ]
-            })
+            }, separators=(',', ':')) # <--- ADD THIS HERE
             while True:
                 try:
                     async with websockets.connect(C["rtds_url"], ping_interval=5) as ws:
