@@ -37,7 +37,10 @@ SETUP:
     POLYMARKET_PK=           (live only)
     POLYMARKET_FUNDER=       (live only)
 """
-
+import sys, io, os, asyncio, uvicorn
+from fastapi import FastAPI, WebSocket
+from fastapi.responses import HTMLResponse
+# ... keep your existing sys.stdout/err logic here
 import os, time, json, random, math, threading, asyncio, statistics
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -1215,7 +1218,21 @@ class IronDomeV8:
         self.recent_trades = []
         self.start_time = time.time()
         self.committed = 0.0          # $ currently locked in open positions
-
+        self.dashboard_client = None
+    async def broadcast_to_dashboard(self, message="Scanning..."):
+        if self.dashboard_client:
+            try:
+                payload = {
+                    "balance": float(self.pos_tracker.balance),
+                    "total_pnl": float(self.pos_tracker.total_pnl),
+                    "win_rate": float(self.pos_tracker.win_rate),
+                    "open_positions": len(self.pos_tracker.open_positions),
+                    "latency": int(self.lat_tracker.avg_ms()),
+                    "last_log": message
+                }
+                await self.dashboard_client.send_json(payload)
+            except Exception:
+                self.dashboard_client = None
     def stats(self):
         pnl = self.bal - self.start
         wr = round(self.wins / self.trades * 100) if self.trades else 0
@@ -1568,20 +1585,39 @@ class DashboardHandler(SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         pass  # silence HTTP logs
 
-def start_dashboard(port=8050):
-    server = HTTPServer(('0.0.0.0', port), DashboardHandler)
-    threading.Thread(target=server.serve_forever, daemon=True).start()
-    log(f"Dashboard running at http://localhost:{port}", "sys")
+# --- NEW MODERN DASHBOARD START ---
+app = FastAPI()
+bot_instance = None 
 
-# ──────────────────────────────────────────────────────────────
-# ENTRY POINT
-# ──────────────────────────────────────────────────────────────
+@app.get("/")
+async def get_dashboard():
+    try:
+        with open("dashboard.html", "r") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        return HTMLResponse("<h1>Error: dashboard.html not found!</h1>", status_code=404)
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    global bot_instance
+    if bot_instance:
+        bot_instance.dashboard_client = websocket
+    try:
+        while True:
+            await websocket.receive_text()
+    except:
+        if bot_instance:
+            bot_instance.dashboard_client = None
+
+# --- UPDATED ENTRY POINT ---
 if __name__ == "__main__":
     print("\n" + "=" * 62)
-    print("  IRON DOME v8 — Optimized Real Data Build")
+    print("  IRON DOME v8 – Optimized Real Data Build")
     print("  BTC/ETH/SOL  |  5m + 15m Up/Down  |  Multi-factor Edge")
     print("=" * 62 + "\n")
 
+    # 1. Safety & Dependency Checks
     if not C["dry_run"] and not C["pk"]:
         print("ERROR: LIVE mode needs POLYMARKET_PK in .env")
         print("Set DRY_RUN=true for paper trading.")
@@ -1595,7 +1631,7 @@ if __name__ == "__main__":
         print("NOTE: websockets not installed — Chainlink stream disabled")
         print("      pip install websockets\n")
 
-    # Initialize components
+    # 2. Initialize Components
     lat_tracker = LatencyTracker()
     log(f"Initial latency: {lat_tracker.avg_ms():.0f}ms → {lat_tracker.label()}", "sys")
 
@@ -1610,19 +1646,26 @@ if __name__ == "__main__":
     lat_tracker.run_background()
     pos_tracker.run_background()
 
+    # Give components a few seconds to warm up
     time.sleep(6)
 
+    # 3. Initialize the Bot and Link to Dashboard
     bot = IronDomeV8(pf, finder, ex, lat_tracker, pos_tracker)
+    bot_instance = bot 
 
-    # Start dashboard server
-    import __main__
-    __main__._bot_ref = bot
-    dash_port = int(os.getenv("DASH_PORT", "8050"))
-    start_dashboard(dash_port)
+    # 4. Start Concurrent Tasks
+    loop = asyncio.get_event_loop()
+    
+    # Run the trading loop in the background
+    loop.create_task(bot.run()) 
 
+    # Start the Web Server (Required for Railway)
+    port = int(os.environ.get("PORT", 8080))
+    print(f"[SYS] Dashboard active at http://0.0.0.0:{port}")
+    
     try:
-        bot.run()
+        uvicorn.run(app, host="0.0.0.0", port=port, log_level="error")
     except KeyboardInterrupt:
         bot.active = False
-        log("Interrupted.", "sys")
+        log("Interrupted. Iron Dome Offline.", "sys")
         bot.stats()
