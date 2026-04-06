@@ -1,0 +1,6 @@
+requests
+colorama
+python-dotenv
+websockets
+py-clob-client
+polymarket-apis>=0.2.0
