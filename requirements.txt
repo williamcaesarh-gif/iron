@@ -1,5 +1,0 @@
-requests
-colorama
-python-dotenv
-websockets
-py-clob-client
