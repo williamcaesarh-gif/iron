@@ -90,7 +90,7 @@ C = {
     "scan_sec":   2,              # fast scan cycle (was 4s, need speed for frontrunning)
     "max_kelly":  0.10,           # cap Kelly at 10% of bankroll
     "min_kelly":  0.05,           # floor Kelly at 5%
-    "max_bet":    float(os.getenv("MAX_BET", "35.0")),
+    "max_bet":    35.0,
     "min_volume": 50,             # skip markets with < $50 24h volume
     "stale_secs": 120,            # skip markets not refreshed within 120s
     "stop_loss":  0.06,           # sell early if asset moves 0.06% against us
@@ -2343,26 +2343,26 @@ class IronDomeV8:
             #   EARLY : 100-145s — fresh window, more uncertainty
             if mega_conviction:
                 if secs_left <= 60:
-                    SNIPE_THRESHOLD = 0.58
-                elif secs_left <= 100:
-                    SNIPE_THRESHOLD = 0.62
+                    SNIPE_THRESHOLD = 0.40
+                elif secs_left <= 120:
+                    SNIPE_THRESHOLD = 0.45
                 else:
-                    SNIPE_THRESHOLD = 0.66
+                    SNIPE_THRESHOLD = 0.50
             elif high_conviction:
                 if secs_left <= 60:
-                    SNIPE_THRESHOLD = 0.65
-                elif secs_left <= 100:
-                    SNIPE_THRESHOLD = 0.70
+                    SNIPE_THRESHOLD = 0.45
+                elif secs_left <= 120:
+                    SNIPE_THRESHOLD = 0.50
                 else:
-                    SNIPE_THRESHOLD = 0.75
+                    SNIPE_THRESHOLD = 0.55
             else:
                 # Single source or tiny move — need higher model confidence
                 if secs_left <= 60:
-                    SNIPE_THRESHOLD = 0.75
+                    SNIPE_THRESHOLD = 0.60
                 elif secs_left <= 100:
-                    SNIPE_THRESHOLD = 0.80
+                    SNIPE_THRESHOLD = 0.65
                 else:
-                    SNIPE_THRESHOLD = 0.85
+                    SNIPE_THRESHOLD = 0.75
 
             best_price = max(up_mid or 0, dn_mid or 0)
             best_side = "UP" if (up_mid or 0) >= (dn_mid or 0) else "DN"
