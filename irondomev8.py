@@ -33,7 +33,7 @@ SETUP:
 
 .env:
     DRY_RUN=true
-    STARTING_BALANCE=10
+    STARTING_BALANCE=20
     POLYMARKET_PK=           (live only)
     POLYMARKET_FUNDER=       (live only)
 """
@@ -2164,7 +2164,7 @@ class IronDomeV8:
             # Compute fresh secs_left (cached value may be stale by up to 10s)
             secs_left = max(0, int(mkt["window_end"] - time.time()))
             # Widened sniper window: 5-45s before close with graduated thresholds
-            if secs_left < 35 or secs_left > 120:
+            if secs_left < 45 or secs_left > 140:
                 continue
             # Don't double up on same asset
             if self.pos.has_open(mkt["asset"]):
@@ -2237,28 +2237,28 @@ class IronDomeV8:
 
             if mega_conviction:
                 # Strong move, both sources agree — enter aggressively
-                if secs_left <= 50:
+                if secs_left <= 60:
                     SNIPE_THRESHOLD = 0.30
-                elif secs_left <= 90:
+                elif secs_left <= 130:
                     SNIPE_THRESHOLD = 0.40
                 else:
                     SNIPE_THRESHOLD = 0.45
             elif high_conviction:
                 # Moderate move, both agree — lower threshold
-                if secs_left <= 50:
-                    SNIPE_THRESHOLD = 0.45
-                elif secs_left <= 90:
+                if secs_left <= 60:
+                    SNIPE_THRESHOLD = 0.55
+                elif secs_left <= 130:
                     SNIPE_THRESHOLD = 0.50
                 else:
-                    SNIPE_THRESHOLD = 0.55
+                    SNIPE_THRESHOLD = 0.45
             else:
                 # Single source or tiny move — need higher model confidence
-                if secs_left <= 45:
+                if secs_left <= 60:
+                    SNIPE_THRESHOLD = 0.50
+                elif secs_left <= 130:
                     SNIPE_THRESHOLD = 0.55
-                elif secs_left <= 90:
-                    SNIPE_THRESHOLD = 0.60
                 else:
-                    SNIPE_THRESHOLD = 0.70
+                    SNIPE_THRESHOLD = 0.65
 
             best_price = max(up_mid or 0, dn_mid or 0)
             best_side = "UP" if (up_mid or 0) >= (dn_mid or 0) else "DN"
