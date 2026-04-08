@@ -88,7 +88,7 @@ C = {
     "min_bal":    1.50,
     "cooldown":   10,             # base cooldown (adaptive: * streak)
     "scan_sec":   2,              # fast scan cycle (was 4s, need speed for frontrunning)
-    "max_kelly":  0.10,           # cap Kelly at 10% of bankroll
+    "max_kelly":  0.08,           # cap Kelly at 10% of bankroll
     "min_kelly":  0.05,           # floor Kelly at 5%
     "max_bet":    35.0,
     "min_volume": 50,             # skip markets with < $50 24h volume
@@ -638,10 +638,10 @@ class MarketFinder:
                     raw_asks = ob.get("asks", [])
                     raw_bids = ob.get("bids", [])
                     if raw_asks:
-                        info["book_asks"] = [{"price": float(a["price"]), "size": float(a["size"])}
+                        info["book_asks"] = [{"price": float(a["price"]), "": float(a[""])}
                                              for a in raw_asks[:C["ob_depth"]]]
                     if raw_bids:
-                        info["book_bids"] = [{"price": float(b["price"]), "size": float(b["size"])}
+                        info["book_bids"] = [{"price": float(b["price"]), "": float(b[""])}
                                              for b in raw_bids[:C["ob_depth"]]]
                     if raw_bids and raw_asks:
                         info["bid"] = float(raw_bids[0]["price"])
@@ -2556,9 +2556,9 @@ class IronDomeV8:
 
             # Kelly sizing with time decay
             size = kelly_size(ed, avail)
-            if mkt["secs_left"] < 90:
+            if mkt["secs_left"] < 120:
                 size *= max(0.3, mkt["secs_left"] / 90)
-            size = max(0.50, min(size, avail * C["max_kelly"]))
+            size = max(0.50, min(size, avail * C["max_kelly"], C["max_bet"]))
 
             if size > avail:
                 log(f"Size ${size:.2f} > available ${avail:.2f}, skipping.", "warn")
