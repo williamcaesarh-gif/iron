@@ -56,13 +56,13 @@ CONFIG = {
 
     # ── Sniper ──
     "sniper_start_s":     30,      # Start scanning 30s into window (= 4m30s before exp for 5m).
-    "max_entry_price":    0.62,    # Never buy above 62c. Hard cap.
+    "max_entry_price":    0.68,    # Never buy above 62c. Hard cap.
     "fee_rate":           0.0156,  # Polymarket taker fee on crypto Up/Down = 1.56% (156 bps).
     "require_both_agree": True,    # Require Binance+Chainlink to agree on direction before firing.
     # Conviction thresholds (|delta_pct| = how far price moved from PTB)
     "conv_low":           0.0003,  # 0.03% — too weak, skip
-    "conv_high":          0.0008,  # 0.08% — tradeable
-    "conv_mega":          0.0020,  # 0.20% — strong signal
+    "conv_high":          0.0006,  # 0.08% — tradeable
+    "conv_mega":          0.0015,  # 0.20% — strong signal
 
     # ── Sizing ──
     "balance":            10.00,   # Starting balance (overridden by wallet sync in live mode).
