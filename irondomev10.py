@@ -56,7 +56,7 @@ CONFIG = {
 
     # ── Sniper ──
     "sniper_start_s":     10,      # Start scanning 10s into window.
-    "max_entry_price":    0.80,    # Never buy above 80c. Hard cap.
+    "max_entry_price":    0.76,    # Never buy above 76c. Hard cap.
     "fee_rate":           0.0156,  # Polymarket taker fee on crypto Up/Down = 1.56% (156 bps).
     "require_both_agree": True,    # Require Binance+Chainlink to agree on direction before firing.
     # Conviction thresholds (|delta_pct| = how far price moved from PTB)
@@ -66,14 +66,14 @@ CONFIG = {
 
     # ── Sizing ──
     "balance":            20.00,   # Starting balance for dry-run paper trading.
-    "size_pct":           0.20,    # 20% of available balance per trade.
-    "max_position_usd":   5.00,    # Hard cap per single position.
+    "size_pct":           0.10,    # 20% of available balance per trade.
+    "max_position_usd":   35.00,    # Hard cap per single position.
     "min_order_usd":      1.00,    # Polymarket minimum order value.
 
     # ── Lifecycle ──
-    "auto_exit_price":    0.95,    # GTC sell at 95c for early win exit.
-    "reversal_drop":      0.15,    # Stop-loss triggers if price drops this much from entry.
-    "reversal_floor":     0.35,    # Stop-loss if token value drops below 35c.
+    "auto_exit_price":    0.99,    # GTC sell at 95c for early win exit.
+    "reversal_drop":      0.30,    # Stop-loss triggers if price drops this much from entry.
+    "reversal_floor":     0.32,    # Stop-loss if token value drops below 35c.
 
     # ── Infrastructure ──
     "dry_run":            True,    # True=paper trading, False=real CLOB orders.
