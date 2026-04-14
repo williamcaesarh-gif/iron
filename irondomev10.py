@@ -55,7 +55,7 @@ CONFIG = {
     ],  # Only 5m — removed 15m
 
     # ── Sniper ──
-    "sniper_start_s":     10,      # Start scanning 10s into window.
+    "sniper_start_s":     50,      # Start scanning 10s into window.
     "max_entry_price":    0.76,    # Never buy above 76c. Hard cap.
     "fee_rate":           0.0156,  # Polymarket taker fee on crypto Up/Down = 1.56% (156 bps).
     "require_both_agree": True,    # Require Binance+Chainlink to agree on direction before firing.
