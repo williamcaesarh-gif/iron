@@ -61,8 +61,8 @@ CONFIG = {
     "require_both_agree": True,    # Require Binance+Chainlink to agree on direction before firing.
     # Conviction thresholds (|delta_pct| = how far price moved from PTB)
     "conv_low":           0.0003,  # 0.03% — too weak, skip
-    "conv_high":          0.0008,  # 0.08% — tradeable
-    "conv_mega":          0.0020,  # 0.20% — strong signal
+    "conv_high":          0.00062,  # 0.08% — tradeable
+    "conv_mega":          0.0015,  # 0.20% — strong signal
 
     # ── Sizing ──
     "balance":            20.00,   # Starting balance for dry-run paper trading.
