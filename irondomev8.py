@@ -2164,7 +2164,7 @@ class IronDomeV8:
             # Compute fresh secs_left (cached value may be stale by up to 10s)
             secs_left = max(0, int(mkt["window_end"] - time.time()))
             # Widened sniper window: 5-45s before close with graduated thresholds
-            if secs_left < 60 or secs_left > 270:
+            if secs_left < 120 or secs_left > 270:
                 continue
             # Don't double up on same asset
             if self.pos.has_open(mkt["asset"]):
@@ -2237,25 +2237,25 @@ class IronDomeV8:
 
             if mega_conviction:
                 # Strong move, both sources agree — enter aggressively
-                if secs_left <= 120:
+                if secs_left <= 160:
                     SNIPE_THRESHOLD = 0.50
-                elif secs_left <= 180:
+                elif secs_left <= 210:
                     SNIPE_THRESHOLD = 0.54
                 else:
                     SNIPE_THRESHOLD = 0.64
             elif high_conviction:
                 # Moderate move, both agree — lower threshold
-                if secs_left <= 120:
+                if secs_left <= 160:
                     SNIPE_THRESHOLD = 0.56
-                elif secs_left <= 180:
+                elif secs_left <= 210:
                     SNIPE_THRESHOLD = 0.61
                 else:
                     SNIPE_THRESHOLD = 0.68
             else:
                 # Single source or tiny move — need higher model confidence
-                if secs_left <= 120:
+                if secs_left <= 160:
                     SNIPE_THRESHOLD = 0.64
-                elif secs_left <= 180:
+                elif secs_left <= 210:
                     SNIPE_THRESHOLD = 0.68
                 else:
                     SNIPE_THRESHOLD = 0.75
