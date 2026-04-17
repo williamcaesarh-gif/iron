@@ -81,7 +81,7 @@ CONFIG = {
     # ── Sizing ──
     "balance":            20.00,   # Starting balance for dry-run paper trading.
     "size_pct":           0.10,    # 10% of available balance per trade.
-    "max_position_usd":   5.00,    # Hard cap per single position.
+    "max_position_usd":   10.00,    # Hard cap per single position.
     "min_order_usd":      1.00,    # Polymarket minimum order value.
 
     # ── Lifecycle ──
