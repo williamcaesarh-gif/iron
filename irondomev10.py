@@ -88,9 +88,9 @@ CONFIG = {
     "limit_tolerance":    0.03,    # +3c above best ask for live limit orders
 
     # ── Sizing ──
-    "balance":            20.00,   # Starting balance for dry-run paper trading.
-    "size_pct":           0.10,    # 10% of available balance per trade.
-    "max_position_usd":   10.00,    # Hard cap per single position.
+    "balance":            100.00,   # Starting balance for dry-run paper trading.
+    "size_pct":           0.08,    # 10% of available balance per trade.
+    "max_position_usd":   25.00,    # Hard cap per single position.
     "min_order_usd":      1.00,    # Polymarket minimum order value.
 
     # ── Lifecycle ──
