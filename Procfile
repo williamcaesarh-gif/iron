@@ -1,1 +1,1 @@
-web: python enigmav1.py
+web: python spectrum.py
