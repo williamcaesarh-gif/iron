@@ -67,7 +67,7 @@ CONFIG = {
 
     # ── Sniper ──
     "sniper_start_s":     120,      # Start scanning 30s into window.
-    "max_entry_price":    0.69,    # Never buy above 68c. Hard cap.
+    "max_entry_price":    0.68,    # Never buy above 68c. Hard cap.
     "fee_rate":           0.0156,  # Polymarket taker fee on crypto Up/Down = 1.56% (156 bps).
     "require_both_agree": True,    # Require Binance+Chainlink to agree on direction before firing.
     # Conviction thresholds (|delta_pct| = how far price moved from PTB)
@@ -128,7 +128,7 @@ CONFIG = {
     # and re-validated against max_entry_price. No edge/book/vpin re-check.
     # Runtime toggle without restart: `echo on > ~/spectrum_inverted.flag`
     # (or `echo off`). Bot reads the file once per tick.
-    "inverted_mode":            True,
+    "inverted_mode":            False,
 
     # ── Auto-Switch (mode crossover based on rolling WR) ──
     # When enabled, after each settled trade the bot evaluates rolling WR of
@@ -137,7 +137,7 @@ CONFIG = {
     # clears the rolling window. Crossover math: at 58c entry breakeven=58.7%,
     # at 42c entry breakeven=42.7%; modes have equal EV at WR=58/42.
     # Runtime toggle: `echo on > ~/spectrum_auto.flag` (or `echo off`).
-    "auto_switch_enabled":            True,
+    "auto_switch_enabled":            False,
     "auto_switch_window":             15,    # rolling WR window (current-mode trades)
     "auto_switch_warmup":             10,    # min trades before evaluation kicks in
     "auto_switch_cooldown":           10,    # trades between switches (anti-flap)
