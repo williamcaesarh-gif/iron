@@ -95,7 +95,7 @@ CONFIG = {
     # max-edge across YES/NO asks. Only the FV model + edge gate decide.
     # Still respects: sniper_start, secs_left, PTB, max_entry_price, has_pos,
     # sniper_dedup, balance, inverted_mode.
-    "fv_pure_mode":              False,
+    "fv_pure_mode":              True,
     "fv_pure_min_edge":          0.03,  # 3c min edge — single threshold (replaces min_edge_up/dn)
     # Book pressure: bid/ask imbalance near top of book
     "book_imbalance_min": 0.3,     # min bid_size / (bid_size + ask_size) ratio within depth range
