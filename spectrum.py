@@ -70,7 +70,7 @@ CONFIG = {
     "sniper_start_s":     120,      # Start scanning 30s into window.
     "max_entry_price":    0.68,    # Never buy above 68c. Hard cap.
     "fee_rate":           0.0156,  # Polymarket taker fee on crypto Up/Down = 1.56% (156 bps).
-    "require_both_agree": True,    # Require Binance+Chainlink to agree on direction before firing.
+    "require_both_agree": False,    # Require Binance+Chainlink to agree on direction before firing.
     # Conviction thresholds (|delta_pct| = how far price moved from PTB)
     "conv_low":           0.0002,  # 0.02% — too weak, skip
     "conv_high":          0.0003,  # 0.03% — tradeable
